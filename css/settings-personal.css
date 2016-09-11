@@ -1,0 +1,13 @@
+#twofactor_yubikey input {
+    width: 25em;
+}
+
+#twofactor_yubikey label span {
+    display: inline-block;
+    min-width: 150px;
+    padding: 8px 0px;
+}
+
+div#twofactor_yubikey_settings_msg {
+    margin-left: 10px;
+}

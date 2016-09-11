@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<info>
+    <id>twofactor_yubikey</id>
+    <name>Two Factor Yubikey</name>
+    <description>Yubikey TFA provider</description>
+    <licence>AGPL</licence>
+    <author>Jack</author>
+    <version>0.0.3</version>
+    <namespace>TwoFactor_Yubikey</namespace>
+    <category>other</category>
+
+    <two-factor-providers>
+        <provider>OCA\TwoFactor_Yubikey\Provider\YubikeyProvider</provider>
+      </two-factor-providers>
+
+    <dependencies>
+        <owncloud min-version="" />
+    </dependencies>
+</info>
