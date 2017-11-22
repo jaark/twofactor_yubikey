@@ -14,12 +14,12 @@ namespace OCA\TwoFactor_Yubikey\Db;
 use OCP\AppFramework\Db\DoesNotExistException;
 use OCP\AppFramework\Db\Mapper;
 use OCP\DB\QueryBuilder\IQueryBuilder;
-use OCP\IDb;
+use OCP\IDbConnection;
 use OCP\IUser;
 
 class KeyIDMapper extends Mapper
 {
-    public function __construct(IDb $db)
+    public function __construct(IDbConnection $db)
     {
         parent::__construct($db, 'twofactor_yubikey');
     }

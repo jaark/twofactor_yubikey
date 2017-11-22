@@ -102,7 +102,8 @@ public function getKeyId(IUser $user) {
    $clientID = $config->getClientID();
    $secretKey = $config->getSecretKey();
 
-   $yubi = new \Auth_Yubico($clientID, $secretKey);
+   $yubi = new \Auth_Yubico($clientID,$secretKey,$config->getUseHttps(), $config->getValidateHttps());
+   $yubi->addURLpart($config->getAuthServerURL()); 
    $auth = $yubi->verify($otp);
 
    if (\PEAR::isError($auth)) {
