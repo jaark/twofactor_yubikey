@@ -58,13 +58,15 @@ public function getKeyId(IUser $user) {
  */
  public function setKeyId(IUser $user, $keyID) {
    $this->deleteKeyId($user);
+   if( !empty($keyID) )
+   {
+      $dbKeyID = new KeyID();
 
-   $dbKeyID = new KeyID();
+      $dbKeyID->setUserId($user->getUID());
+      $dbKeyID->setYubikeyId($keyID);
 
-   $dbKeyID->setUserId($user->getUID());
-   $dbKeyID->setYubikeyId($keyID);
-
-   $this->keyIDMapper->insert($dbKeyID);
+      $this->keyIDMapper->insert($dbKeyID);
+   }
  }
 
 /**
