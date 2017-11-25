@@ -29,7 +29,7 @@ interface IYubiotp
  /**
   * @param IUser $user
   */
- public function deleteKeyId(IUser $user);
+ public function deleteKeyId(IUser $user, $keyID);
 
  /**
   * @param IUser $user

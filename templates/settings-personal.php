@@ -19,9 +19,16 @@ style('twofactor_yubikey', 'settings-personal');
   <h2 class="inlineblock"><?php p($l->t('Yubikey Configuration')); ?></h2>
   <div id="twofactor_yubikey-settings-msg" class="msg success inlineblock" style="display: none;">Saved</div>
 
+    <table id="yubikey-devices">
+    <tr><td>
+    <label>Registered YubiKey(s) </label></td>
+    <td id='yubikeys'> 
+    <!-- Yubikeys will be here -->
+	</td></tr>
+     </table>
   <p>
     <label>
-      <span><?php p($l->t('Yubikey ID')) ?></span>
+      <span><?php p($l->t('Add New Yubikey')) ?></span>
       <input id="twofactor_yubikey-yubikey-id" type="text" value="<?php p($_['yubikeyID']) ?>" placeholder="<?php p($l->t('Insert Yubikey OTP')); ?>" />
     </label>
   </p>

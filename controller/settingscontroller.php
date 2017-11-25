@@ -58,11 +58,28 @@ class SettingsController extends Controller {
 
         /**
          * @NoAdminRequired
+         * @param string $keyId
          * @return JSONResponse
          */
-        public function getid() {
+        public function deleteid($keyId) {
           $user = $this->userSession->getUser();
-          $keyId = $this->yubiotp->getKeyId($user);
+          if( $this->yubiotp->deleteKeyId($user, $keyId) ){
+             return ['success' => true ];
+          }
+          else {
+             return ['success' => false ];
+          }
+         
+        }
+
+        /**
+         * @NoAdminRequired
+         * @return JSONResponse
+         */
+        public function getids() {
+          $user = $this->userSession->getUser();
+          $keyId = $this->yubiotp->getKeyIds($user);
+         
           return ['keyId' => $keyId ];
         }
 }

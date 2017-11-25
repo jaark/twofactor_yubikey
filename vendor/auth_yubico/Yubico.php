@@ -104,12 +104,17 @@ class Auth_Yubico
 	 *                                 default true)
 	 * @access public
 	 */
-	function Auth_Yubico($id, $key = '', $https = 0, $httpsverify = 1)
-	{
+	function __construct($id, $key = '', $https = 0, $httpsverify = 1)
+        {
 		$this->_id =  $id;
-		$this->_key = base64_decode($key);
-		$this->_https = $https;
-		$this->_httpsverify = $httpsverify;
+                $this->_key = base64_decode($key);
+                $this->_https = $https; 
+                $this->_httpsverify = $httpsverify; 
+	}
+
+        function Auth_Yubico($id, $key = '', $https = 0, $httpsverify = 1)
+	{
+		self::__construct($id,$key,$https,$httpsverify);
 	}
 
 	/**

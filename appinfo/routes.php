@@ -20,6 +20,7 @@
 return [
     'routes' => [
      ['name' => 'settings#setid', 'url' => '/settings/setid', 'verb' => 'POST'],
-     ['name' => 'settings#getid', 'url' => '/settings/getid', 'verb' => 'GET'],
+     ['name' => 'settings#deleteid', 'url' => '/settings/deleteid', 'verb' => 'POST'],
+     ['name' => 'settings#getids', 'url' => '/settings/getids', 'verb' => 'GET'],
    ]
 ];

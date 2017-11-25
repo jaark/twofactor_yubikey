@@ -11,3 +11,43 @@
 div#twofactor_yubikey_settings_msg {
     margin-left: 10px;
 }
+
+#yubikey-devices tr td {
+	vertical-align: top;
+	
+}
+#yubikey-devices tr #yubikeys
+{
+	padding-left:10px;
+}
+
+.yubikey-device {
+	line-height: 300%;
+	display: flex;
+}
+
+.yubikey-device .more {
+	position: relative;
+}
+.yubikey-device .icon-delete {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	padding-left: 20px;
+	padding-top: 20px;
+	vertical-align: top;
+	opacity: .7;
+}
+
+
+/** icons for personal page settings **/
+.nav-icon-yubikey-configuration, .icon-yubikey-device {
+	background-image: url('../img/app-dark.svg?v=1');
+}
+
+.icon-yubikey-device {
+	display: inline-block;
+	background-size: 100%;
+	padding: 3px;
+	margin: 3px;
+}
