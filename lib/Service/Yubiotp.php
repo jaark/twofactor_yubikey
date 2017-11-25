@@ -33,51 +33,101 @@ class Yubiotp implements IYubiotp {
  */
  public function hasKeyId(IUser $user) {
    try {
-     $this->keyIDMapper->getYubikeyId($user);
+     $this->keyIDMapper->getYubikeyIds($user);
    } catch (DoesNotExistException $ex) {
      return false;
    }
    return true;
  }
 
- /**
+
+/**
 * @param IUser $user
 */
-public function getKeyId(IUser $user) {
+public function getKeyIds(IUser $user) {
+   $ret_val = array();
   try {
-    $keyId = $this->keyIDMapper->getYubikeyId($user);
-  } catch (DoesNotExistException $ex) {
-    return "";
-  }
-  return $keyId->getYubikeyId();
-}
+    $keyIds = $this->keyIDMapper->getYubikeyIds($user);
+    foreach($keyIds as $value)
+    {
+      array_push($ret_val, $value->getYubikeyId()); 
+    }
 
+  } catch (DoesNotExistException $ex) {
+    return $ret_val;
+  }
+
+  return $ret_val;
+}
 /**
  * @param IUser $user
  * @param string $kkeyID
  */
  public function setKeyId(IUser $user, $keyID) {
-   $this->deleteKeyId($user);
+    //When setting a new one. 
+   //$this->deleteKeyId($user);
+
    if( !empty($keyID) )
    {
-      $dbKeyID = new KeyID();
+     //first let's make sure we're not adding duplicates
+     try 
+     {
+          //First, findout if the user has the key
+          $UserKeys = $this->keyIDMapper->getYubikeyIds($user);
 
-      $dbKeyID->setUserId($user->getUID());
-      $dbKeyID->setYubikeyId($keyID);
+          foreach ($UserKeys as $keyid)
+          {
+            if( $keyID === $keyid->getYubikeyId() )
+            {
+              //The key is already in the database, no need to add
+              return true;
+            }
+          }
 
-      $this->keyIDMapper->insert($dbKeyID);
-   }
+     } catch (DoesNotExistException $ex) {
+        //we're good here, go through  
+      }
+
+      //Add the key to the database
+     $dbKeyID = new KeyID();
+
+     $dbKeyID->setUserId($user->getUID());
+     $dbKeyID->setYubikeyId($keyID);
+
+     $this->keyIDMapper->insert($dbKeyID);
+  }
+  
  }
 
 /**
  * @param IUser $user
+ * @param string $kkeyID
  */
- public function deleteKeyId(IUser $user) {
-  try {
-    $dbKeyID = $this->keyIDMapper->getYubikeyId($user);
-    $this->keyIDMapper->delete($dbKeyID);
-  }  catch (DoesNotExistException $ex) {
-  }
+ public function deleteKeyId(IUser $user, $keyID) {
+    
+    if( !empty($keyID))
+    {
+      try
+      {
+          //First, findout if the user has the key
+          $UserKeys = $this->keyIDMapper->getYubikeyIds($user);
+
+          foreach ($UserKeys as $keyid)
+          {
+            if( $keyID === $keyid->getYubikeyId() )
+            {
+              //Delete the entity
+              $this->keyIDMapper->delete($keyid);
+              return true; 
+            }
+          }
+      } catch (DoesNotExistException $ex) {
+      return false; 
+      }
+
+    }
+
+    return false;
  }
 
 /**
@@ -92,13 +142,29 @@ public function getKeyId(IUser $user) {
    $keyID = substr($otp,0,12);
 
    try {
-     $userKey = $this->keyIDMapper->getYubikeyId($user);
+     //returns an array of values
+     $userKeys = $this->keyIDMapper->getYubikeyIds($user);
    } catch (DoesNotExistException $ex) {
      return false;
    }
 
-   if ($keyID <> $userKey->getYubikeyId()) {
-     return false;
+   $iskeyinlist = false;
+   //Verify that the user key is in the database for the given user
+   foreach($userKeys as $userKey)
+   {
+      if ($keyID <> $userKey->getYubikeyId()) {
+        continue;
+      }
+      else
+      {
+        $iskeyinlist = true;
+      }
+   }
+
+   //This key is not the database, return false
+   if(!$iskeyinlist)
+   {
+    return false;
    }
 
    $clientID = $config->getClientID();

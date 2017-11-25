@@ -43,11 +43,25 @@ class KeyIDMapper extends Mapper
 
         $row = $result->fetch();
         $result->closeCursor();
+
         if ($row === false) {
             throw new DoesNotExistException('KeyID does not exist');
         }
 
         return KeyID::fromRow($row);
+    }
+
+    public function getYubikeyIds(IUser $user,$limit=null,$offset=null)
+    {
+       $sql = 'SELECT * FROM `*PREFIX*twofactor_yubikey` WHERE `user_id` = ?';
+       $entities = $this->findEntities($sql,[$user->getUID()],$limit,$offset); 
+       $entities = array_filter($entities);
+       if(empty($entities))
+       {
+         throw new DoesNotExistException('KeyID does not exist');
+       }
+
+        return $entities;
     }
 
 }
