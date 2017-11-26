@@ -22,5 +22,6 @@ return [
      ['name' => 'settings#setid', 'url' => '/settings/setid', 'verb' => 'POST'],
      ['name' => 'settings#deleteid', 'url' => '/settings/deleteid', 'verb' => 'POST'],
      ['name' => 'settings#getids', 'url' => '/settings/getids', 'verb' => 'GET'],
+     ['name' => 'settings#testotp', 'url' => '/settings/testotp', 'verb' => 'POST'],
    ]
 ];

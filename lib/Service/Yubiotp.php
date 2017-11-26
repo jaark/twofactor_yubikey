@@ -61,18 +61,25 @@ public function getKeyIds(IUser $user) {
 }
 /**
  * @param IUser $user
- * @param string $kkeyID
+ * @param string $keyID
  */
- public function setKeyId(IUser $user, $keyID) {
-    //When setting a new one. 
-   //$this->deleteKeyId($user);
-
-   if( !empty($keyID) )
+ public function setKeyId(IUser $user, $otp) {
+   
+   if( !empty($otp) )
    {
-     //first let's make sure we're not adding duplicates
+     //Extract the $keyID
+     $keyID = substr($otp,0,12);
+
+     //First, Let's validate the otp (ensures that configuration is good)
+     if(!$this->validateTestOTP($otp) )
+     {
+        return false;
+     }
+
+     //Second, let's make sure we're not adding duplicates
      try 
      {
-          //First, findout if the user has the key
+          //Get all the entities
           $UserKeys = $this->keyIDMapper->getYubikeyIds($user);
 
           foreach ($UserKeys as $keyid)
@@ -97,6 +104,8 @@ public function getKeyIds(IUser $user) {
      $this->keyIDMapper->insert($dbKeyID);
   }
   
+  return true;
+
  }
 
 /**
@@ -129,6 +138,29 @@ public function getKeyIds(IUser $user) {
 
     return false;
  }
+
+/**
+ * @param IUser $user
+ * @param string $otp
+ */
+public function validateTestOTP($otp)
+{
+   $config = new \OCA\TwoFactor_Yubikey\TwoFactor_YubikeyConfig(\OC::$server->getConfig());
+   $clientID = $config->getClientID();
+   $secretKey = $config->getSecretKey();
+
+   $yubi = new \Auth_Yubico($clientID,$secretKey,$config->getUseHttps(), $config->getValidateHttps());
+   $yubi->addURLpart($config->getAuthServerURL()); 
+   $auth = $yubi->verify($otp);
+
+   if (\PEAR::isError($auth)) {
+     return false;
+   } else {
+     return true;
+   }
+
+}
+
 
 /**
  * @param IUser $user

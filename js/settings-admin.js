@@ -25,6 +25,41 @@
         }
 };
 
+function testYubiKeyOTP(otp)
+{
+        
+        var url = OC.generateUrl('/apps/twofactor_yubikey/settings/testotp');
+
+       
+        var testing = $.ajax(url, {
+            method: 'POST',
+            data: {
+                otp: otp
+            }
+        });
+         $.when(testing).done(function(data) {
+         if( data.success)
+         {
+            OC.msg.finishedSaving('#twofactor_yubikey-settings-otpresults', {
+                'status': 'success',
+                'data': {
+                    'message':'Success! OTP Verified! Configuration is good.'
+                }
+            });
+         } 
+         else
+         {
+             OC.msg.finishedSaving('#twofactor_yubikey-settings-otpresults', {
+                'status': 'failure',
+                'data': {
+                    'message':'OTP Failed Validation! Verify Configuration and try again.'
+                }
+            });
+         }
+              
+    });
+}
+
 $(document).ready(function(){
   $('#twofactor_yubikey-client-id').keyup(function (e) {
     if (e.keyCode == 13) {
@@ -57,5 +92,13 @@ $(document).ready(function(){
   $('#twofactor_yubikey-validate-https').change(function (e) {
     twofactor_yubikeySetting.save('validateHttps', this.checked);
   });
+
+ $('#twofactor_yubikey-test-otp').keyup(function (e) {
+    if (e.keyCode == 13) {
+      testYubiKeyOTP($(this).val());
+      $(this).val("");
+    }
+  }); 
+
 
 });

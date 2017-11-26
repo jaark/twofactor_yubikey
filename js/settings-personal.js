@@ -16,30 +16,45 @@ var twofactor_yubikeyid = {
         {
             return;
         }
+
         OC.msg.startSaving('#twofactor_yubikey-settings-msg');
 
         var url = OC.generateUrl('/apps/twofactor_yubikey/settings/setid');
 
-        value = value.substring(0, 12);
+        
         $('#twofactor_yubikey-yubikey-id').val("");
-
+        //we're sending the entire string
         var updating = $.ajax(url, {
             method: 'POST',
             data: {
-                keyId: value
+                otp: value
             }
         });
 
          $.when(updating).done(function(data) {
 
-            OC.msg.finishedSaving('#twofactor_yubikey-settings-msg', {
-                'status': 'success',
-                'data': {
-                    'message': OC.L10N.translate('twofactor_yubikey', 'Saved')
-                }
-            });
+            if( data.success )
+            {
+                OC.msg.finishedSaving('#twofactor_yubikey-settings-msg', {
+                    'status': 'success',
+                    'data': {
+                        'message': OC.L10N.translate('twofactor_yubikey', 'Saved')
+                    }
+                });
 
-            loadKeys();
+                 loadKeys();
+            }
+
+            else
+            {
+                OC.msg.finishedSaving('#twofactor_yubikey-settings-msg', {
+                    'status': 'failure',
+                    'data': {
+                        'message': OC.L10N.translate('twofactor_yubikey', 'Key Registration failed. Try again or contact your administrator.')
+                    }
+                });
+            }
+
         }) ;
 
        

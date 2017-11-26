@@ -29,7 +29,7 @@ style('twofactor_yubikey', 'settings-personal');
   <p>
     <label>
       <span><?php p($l->t('Add New Yubikey')) ?></span>
-      <input id="twofactor_yubikey-yubikey-id" type="text" value="<?php p($_['yubikeyID']) ?>" placeholder="<?php p($l->t('Insert Yubikey OTP')); ?>" />
+      <input id="twofactor_yubikey-yubikey-id" type="text" value="" placeholder="<?php p($l->t('Insert Yubikey OTP')); ?>" />
     </label>
   </p>
 

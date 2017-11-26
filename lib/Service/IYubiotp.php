@@ -22,9 +22,9 @@ interface IYubiotp
 
  /**
   * @param IUser $user
-  * @param string $kkeyID
+  * @param string $otp
   */
- public function setKeyId(IUser $user, $keyID);
+ public function setKeyId(IUser $user, $otp);
 
  /**
   * @param IUser $user
@@ -36,4 +36,9 @@ interface IYubiotp
   * @param string $otp
   */
  public function validateOTP(IUser $user, $otp);
+
+ /**
+ * @param string $otp
+ */
+public function validateTestOTP($otp);
 }

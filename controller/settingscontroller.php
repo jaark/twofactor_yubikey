@@ -47,13 +47,19 @@ class SettingsController extends Controller {
 
         /**
          * @NoAdminRequired
-         * @param string $keyId
+         * @param string $otp
          * @return JSONResponse
          */
-        public function setid($keyId) {
+        public function setid($otp) {
           $user = $this->userSession->getUser();
-          $this->yubiotp->setKeyId($user, $keyId);
-          return ['success' => true ];
+          if( $this->yubiotp->setKeyId($user, $otp) )
+          {
+            return ['success' => true ];
+          }
+          else 
+          {
+            return ['success' => false]; 
+          }
         }
 
         /**
@@ -81,5 +87,22 @@ class SettingsController extends Controller {
           $keyId = $this->yubiotp->getKeyIds($user);
          
           return ['keyId' => $keyId ];
+        }
+
+
+        /**
+         * @NoAdminRequired
+         * @param string $otp
+         * @return JSONResponse
+         */
+        public function testotp($otp) {
+         
+          if( $this->yubiotp->validateTestOTP($otp) ){
+             return ['success' => true ];
+          }
+          else {
+             return ['success' => false ];
+          }
+         
         }
 }
