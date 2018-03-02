@@ -5,15 +5,19 @@
     <description>Yubikey TFA provider using OTP mode</description>
     <licence>AGPL</licence>
     <author>Jack</author>
-    <version>0.1.1</version>
+    <version>0.2.0</version>
     <namespace>TwoFactor_Yubikey</namespace>
-    <category>other</category>
+    <category>auth</category>
+
+    <website>https://github.com/jaark/twofactor_yubikey#readme</website>
+    <bugs>https://github.com/jaark/twofactor_yubikey/issues</bugs>
+    <repository type="git">https://github.com/jaark/twofactor_yubikey.git</repository>
 
     <two-factor-providers>
         <provider>OCA\TwoFactor_Yubikey\Provider\YubikeyProvider</provider>
-      </two-factor-providers>
+    </two-factor-providers>
 
     <dependencies>
-        <owncloud min-version="11" max-version="12" />
+        <nextcloud min-version="11" max-version="13" />
     </dependencies>
 </info>
