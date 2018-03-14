@@ -18,6 +18,6 @@
     </two-factor-providers>
 
     <dependencies>
-        <nextcloud min-version="11" max-version="13" />
+        <nextcloud min-version="13" max-version="13" />
     </dependencies>
 </info>
