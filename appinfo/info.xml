@@ -1,23 +1,37 @@
 <?xml version="1.0"?>
 <info>
-    <id>twofactor_yubikey</id>
-    <name>Two Factor Yubikey</name>
-    <description>Yubikey TFA provider using OTP mode</description>
-    <licence>AGPL</licence>
-    <author>Jack</author>
-    <version>0.2.0</version>
-    <namespace>TwoFactor_Yubikey</namespace>
-    <category>auth</category>
+  <id>twofactor_yubikey</id>
+  <name>Two Factor Yubikey</name>
+  <description>Yubikey TFA provider using OTP mode</description>
+  <licence>AGPL</licence>
+  <author>Jack</author>
+  <version>0.2.0</version>
+  <namespace>TwoFactor_Yubikey</namespace>
+  <category>auth</category>
 
-    <website>https://github.com/jaark/twofactor_yubikey#readme</website>
-    <bugs>https://github.com/jaark/twofactor_yubikey/issues</bugs>
-    <repository type="git">https://github.com/jaark/twofactor_yubikey.git</repository>
+  <website>https://github.com/jaark/twofactor_yubikey#readme</website>
+  <bugs>https://github.com/jaark/twofactor_yubikey/issues</bugs>
+  <repository type="git">https://github.com/jaark/twofactor_yubikey.git</repository>
 
-    <two-factor-providers>
-        <provider>OCA\TwoFactor_Yubikey\Provider\YubikeyProvider</provider>
-    </two-factor-providers>
+  <two-factor-providers>
+    <provider>OCA\TwoFactor_Yubikey\Provider\YubikeyProvider</provider>
+  </two-factor-providers>
 
-    <dependencies>
-        <nextcloud min-version="13" max-version="13" />
-    </dependencies>
+  <settings>
+    <personal>OCA\TwoFactor_Yubikey\Settings\Personal</personal>
+    <admin>OCA\TwoFactor_Yubikey\Settings\Admin</admin>
+  </settings>
+
+  <activity>
+    <settings>
+      <setting>OCA\TwoFactor_Yubikey\Activity\Setting</setting>
+    </settings>
+    <providers>
+      <provider>OCA\TwoFactor_Yubikey\Activity\Provider</provider>
+    </providers>
+  </activity>
+
+  <dependencies>
+    <nextcloud min-version="13" max-version="13"/>
+  </dependencies>
 </info>
