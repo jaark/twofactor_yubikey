@@ -1,6 +1,6 @@
 # Two Factor provider for Yubikey OTP
 
-![](screenshots/twofactor_yubikey_challenge.png)
+![](screenshots/twofactor_yubikey-challenge.png)
 
 This is a second factor authentication provider for Yubico Yubikey devices in the original OTP (one time password) configuration.
 
