@@ -97,7 +97,7 @@ class TwoFactor_YubikeyConfig {
    * @return boolean
    */
   public function getUseHttps() {
-          $useHttps = $this->config->getAppValue('twofactor_yubikey', 'useHttps', 'true') == 'true';
+          $useHttps = $this->config->getAppValue('twofactor_yubikey', 'useHttps', 'true') === 'true';
           return (boolean)$useHttps;
   }
 
@@ -116,7 +116,7 @@ class TwoFactor_YubikeyConfig {
      * @return boolean
      */
     public function getValidateHttps() {
-            $validateHttps = $this->config->getAppValue('twofactor_yubikey', 'validateHttps', 'true') == 'true';
+            $validateHttps = $this->config->getAppValue('twofactor_yubikey', 'validateHttps', 'true') === 'true';
             return (boolean)$validateHttps;
     }
 

@@ -50,7 +50,7 @@ public function getKeyIds(IUser $user) {
     $keyIds = $this->keyIDMapper->getYubikeyIds($user);
     foreach($keyIds as $value)
     {
-      array_push($ret_val, $value->getYubikeyId()); 
+      array_push($ret_val, $value->getYubikeyId());
     }
 
   } catch (DoesNotExistException $ex) {
@@ -64,7 +64,7 @@ public function getKeyIds(IUser $user) {
  * @param string $keyID
  */
  public function setKeyId(IUser $user, $otp) {
-   
+
    if( !empty($otp) )
    {
      //Extract the $keyID
@@ -77,7 +77,7 @@ public function getKeyIds(IUser $user) {
      }
 
      //Second, let's make sure we're not adding duplicates
-     try 
+     try
      {
           //Get all the entities
           $UserKeys = $this->keyIDMapper->getYubikeyIds($user);
@@ -92,7 +92,7 @@ public function getKeyIds(IUser $user) {
           }
 
      } catch (DoesNotExistException $ex) {
-        //we're good here, go through  
+        //we're good here, go through
       }
 
       //Add the key to the database
@@ -103,7 +103,7 @@ public function getKeyIds(IUser $user) {
 
      $this->keyIDMapper->insert($dbKeyID);
   }
-  
+
   return true;
 
  }
@@ -113,7 +113,7 @@ public function getKeyIds(IUser $user) {
  * @param string $kkeyID
  */
  public function deleteKeyId(IUser $user, $keyID) {
-    
+
     if( !empty($keyID))
     {
       try
@@ -127,11 +127,11 @@ public function getKeyIds(IUser $user) {
             {
               //Delete the entity
               $this->keyIDMapper->delete($keyid);
-              return true; 
+              return true;
             }
           }
       } catch (DoesNotExistException $ex) {
-      return false; 
+      return false;
       }
 
     }
@@ -150,7 +150,7 @@ public function validateTestOTP($otp)
    $secretKey = $config->getSecretKey();
 
    $yubi = new \Auth_Yubico($clientID,$secretKey,$config->getUseHttps(), $config->getValidateHttps());
-   $yubi->addURLpart($config->getAuthServerURL()); 
+   $yubi->addURLpart($config->getAuthServerURL());
    $auth = $yubi->verify($otp);
 
    if (\PEAR::isError($auth)) {
@@ -184,7 +184,7 @@ public function validateTestOTP($otp)
    //Verify that the user key is in the database for the given user
    foreach($userKeys as $userKey)
    {
-      if ($keyID <> $userKey->getYubikeyId()) {
+      if ($keyID !== $userKey->getYubikeyId()) {
         continue;
       }
       else
@@ -203,7 +203,7 @@ public function validateTestOTP($otp)
    $secretKey = $config->getSecretKey();
 
    $yubi = new \Auth_Yubico($clientID,$secretKey,$config->getUseHttps(), $config->getValidateHttps());
-   $yubi->addURLpart($config->getAuthServerURL()); 
+   $yubi->addURLpart($config->getAuthServerURL());
    $auth = $yubi->verify($otp);
 
    if (\PEAR::isError($auth)) {
