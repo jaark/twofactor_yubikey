@@ -1,52 +1,17 @@
-# Two Factor Yubikey
-Place this app in **nextcloud/apps/**
+# Two Factor provider for Yubikey OTP
 
-## Building the app
+![](screenshots/twofactor_yubikey_challenge.png)
 
-The app can be built by using the provided Makefile by running:
+This is a second factor authentication provider for Yubico Yubikey devices in the original OTP (one time password) configuration.
 
-    make
+ # System Configuration
+ You need to configure Nextcloud to use an authentication server. This is done in the security tab in the administration settings page.
+ To authenticate via the standard Yubico cloud servers you will need to create a client ID and API key.
+ This is free and can be generated at https://upgrade.yubico.com/getapikey/https://upgrade.yubico.com/getapikey/
 
-This requires the following things to be present:
-* make
-* which
-* tar: for building the archive
-* curl: used if phpunit and composer are not installed to fetch them from the web
-* npm: for building and testing everything JS, only required if a package.json is placed inside the **js/** folder
+ If you have your own authentication server you can fill in the details.
 
-The make command will install or update Composer dependencies if a composer.json is present and also **npm run build** if a package.json is present in the **js/** folder. The npm **build** script should use local paths for build systems and package managers, so people that simply want to build the app won't need to install npm libraries globally, e.g.:
-
-**package.json**:
-```json
-"scripts": {
-    "test": "node node_modules/gulp-cli/bin/gulp.js karma",
-    "prebuild": "npm install && node_modules/bower/bin/bower install && node_modules/bower/bin/bower update",
-    "build": "node node_modules/gulp-cli/bin/gulp.js"
-}
-```
-
-
-## Publish to App Store
-
-First get an account for the [App Store](http://apps.nextcloud.com/) then run:
-
-    make && make appstore
-
-The archive is located in build/artifacts/appstore and can then be uploaded to the App Store.
-
-## Running tests
-You can use the provided Makefile to run all tests by using:
-
-    make test
-
-This will run the PHP unit and integration tests and if a package.json is present in the **js/** folder will execute **npm run test**
-
-Of course you can also install [PHPUnit](http://phpunit.de/getting-started.html) and use the configurations directly:
-
-    phpunit -c phpunit.xml
-
-or:
-
-    phpunit -c phpunit.integration.xml
-
-for integration tests
+ # User Configuration
+ In the user's security settings tab, the IDs of the user's Yubikey(s) need to be registered. They easiest way to do this is to select the 'Add new Yubikey' box and then press the activation button on the Yubikey.
+ If a user has one or more Yubikeys registered to them then they will need to use the Yubikey (or any other configured second factor) to log in.
+ As with any second factor provider, apps that automatically authenticate (for example your Android app or your GNOME app) will need to login using device passwords. To manage it, [know more here](https://docs.nextcloud.com/server/11/user_manual/session_management.html#managing-devices)
