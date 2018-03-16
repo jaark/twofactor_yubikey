@@ -17,6 +17,11 @@ use OCA\TwoFactor_Yubikey\Db\KeyID;
 use OCA\TwoFactor_Yubikey\Db\KeyIDMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 
+use OCP\Activity\IManager;
+use OCP\ILogger;
+use OCP\IRequest;
+use OCP\ISession;
+
 require_once __DIR__ . '/../../vendor/auth_yubico/Yubico.php';
 
 
@@ -25,8 +30,13 @@ class Yubiotp implements IYubiotp {
  /** @var KeyIDMapper */
  private $keyIDMapper;
 
- public function __construct(KeyIDMapper $keyIDMapper) {
+ public function __construct(KeyIDMapper $keyIDMapper, ISession $session, ILogger $logger, IRequest $request, IManager $activityManager) {
    $this->keyIDMapper = $keyIDMapper;
+
+   $this->session = $session;
+   $this->logger = $logger;
+   $this->request = $request;
+   $this->activityManager = $activityManager;
  }
   /**
  * @param IUser $user
@@ -67,6 +77,7 @@ public function getKeyIds(IUser $user) {
 
    if( !empty($otp) )
    {
+     $firstKey = false; // Flag to indicate if this is the first Yubikey for the account. Only affects the activity string.
      //Extract the $keyID
      $keyID = substr($otp,0,12);
 
@@ -92,7 +103,7 @@ public function getKeyIds(IUser $user) {
           }
 
      } catch (DoesNotExistException $ex) {
-        //we're good here, go through
+        $firstKey = true; // No cuurect keys so this is the first one.
       }
 
       //Add the key to the database
@@ -102,10 +113,28 @@ public function getKeyIds(IUser $user) {
      $dbKeyID->setYubikeyId($keyID);
 
      $this->keyIDMapper->insert($dbKeyID);
+     if ($firstKey) {
+        $this->publishEvent($user, 'yubikey_enabled');
+     } else {
+       $this->publishEvent($user, 'yubikey_device_added');
+     }
   }
 
   return true;
 
+ }
+
+ /**
+ * Push an event to the user's activity stream
+ */
+ private function publishEvent(IUser $user, string $event) {
+   $activity = $this->activityManager->generateEvent();
+   $activity->setApp('twofactor_yubikey')
+   ->setType('security')
+   ->setAuthor($user->getUID())
+   ->setAffectedUser($user->getUID())
+   ->setSubject($event);
+   $this->activityManager->publish($activity);
  }
 
 /**
@@ -127,6 +156,15 @@ public function getKeyIds(IUser $user) {
             {
               //Delete the entity
               $this->keyIDMapper->delete($keyid);
+
+              // Provide the activity entry. Checks to see if we have deleted the last key or not.
+              try {
+                $this->keyIDMapper->getYubikeyIds($user);
+                $this->publishEvent($user, 'yubikey_device_removed');
+              } catch (DoesNotExistException $ex) {
+                $this->publishEvent($user, 'yubikey_disabled');
+              }
+
               return true;
             }
           }

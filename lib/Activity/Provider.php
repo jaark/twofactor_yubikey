@@ -45,12 +45,19 @@ class Provider implements IProvider {
 
                 $event->setIcon($this->urlGenerator->getAbsoluteURL($this->urlGenerator->imagePath('core', 'actions/password.svg')));
                 switch ($event->getSubject()) {
-                        case 'yubikey_enabled_subject':
+                        case 'yubikey_enabled':
                                 $event->setSubject($l->t('You enabled Yubikey two-factor authentication for your account'));
                                 break;
-                        case 'yubikey_disabled_subject':
-                                $event->setSubject($l->t('You disabled Yubikey two-factor authentication for your account'));
+                        case 'yubikey_device_added':
+                                $event->setSubject($l->t('You added a Yubikey two-factor authentication device to your account'));
                                 break;
+                        case 'yubikey_disabled':
+                                $event->setSubject($l->t('You removed the last Yubikey device and disabled Yubikey two-factor authentication for your account'));
+                                break;
+                        case 'yubikey_device_removed':
+                                $event->setSubject($l->t('You removed a Yubikey device from your account'));
+                                break;
+
                 }
                 return $event;
         }
