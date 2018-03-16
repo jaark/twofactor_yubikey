@@ -12,6 +12,8 @@ This is a second factor authentication provider for Yubico Yubikey devices in th
  If you have your own authentication server you can fill in the details.
 
  # User Configuration
- In the user's security settings tab, the IDs of the user's Yubikey(s) need to be registered. They easiest way to do this is to select the 'Add new Yubikey' box and then press the activation button on the Yubikey.
- If a user has one or more Yubikeys registered to them then they will need to use the Yubikey (or any other configured second factor) to log in.
- As with any second factor provider, apps that automatically authenticate (for example your Android app or your GNOME app) will need to login using device passwords. To manage it, [know more here](https://docs.nextcloud.com/server/11/user_manual/session_management.html#managing-devices)
+In the user's security settings tab, the IDs of the user's Yubikey(s) need to be registered. Select the 'Add new Yubikey' box and then press the activation button on the Yubikey. The OTP code on the key will be checked to ensure that the user can authenticate.
+ 
+If a user has one or more Yubikeys registered to them then they will need to use the Yubikey (or any other configured second factor) to log in.
+
+As with any second factor provider, apps that automatically authenticate (for example your Android app or your GNOME app) will need to login using device passwords. To manage it, [know more here](https://docs.nextcloud.com/server/11/user_manual/session_management.html#managing-devices)
