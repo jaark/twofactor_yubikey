@@ -1,9 +1,16 @@
-owncloud-twofactor_yubikey (0.0.3)
-* Initial commit - seems to work.
+## 0.3.0 - 2018-03-17
+## Added
+- Populates activity stream with events.
 
-owncloud-twofactor_yubikey (0.1.1)
-* Multiple Yubikey support
-* Add server and key validity checks
+## Changed
+- Migrate to Nextcloud 13 security settings tab.
+- Clean up for publishing to app store.
 
-owncloud-twofactor_yubikey (0.3.0)
-* Migrate to Nextcloud 13' security settings tab.
+## 0.1.1 - 2017-11-25
+###Added
+- Multiple Yubikey support
+- Add server and key validity checks
+
+## 0.0.3 - 2016-09-11
+### Added
+- Everything, initial commit - seems to work.
