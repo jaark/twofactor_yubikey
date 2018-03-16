@@ -7,7 +7,7 @@
 - Clean up for publishing to app store.
 
 ## 0.1.1 - 2017-11-25
-###Added
+### Added
 - Multiple Yubikey support
 - Add server and key validity checks
 
