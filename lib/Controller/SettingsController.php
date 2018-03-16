@@ -56,9 +56,9 @@ class SettingsController extends Controller {
           {
             return ['success' => true ];
           }
-          else 
+          else
           {
-            return ['success' => false]; 
+            return ['success' => false];
           }
         }
 
@@ -75,7 +75,7 @@ class SettingsController extends Controller {
           else {
              return ['success' => false ];
           }
-         
+
         }
 
         /**
@@ -85,7 +85,7 @@ class SettingsController extends Controller {
         public function getids() {
           $user = $this->userSession->getUser();
           $keyId = $this->yubiotp->getKeyIds($user);
-         
+
           return ['keyId' => $keyId ];
         }
 
@@ -96,13 +96,13 @@ class SettingsController extends Controller {
          * @return JSONResponse
          */
         public function testotp($otp) {
-         
+
           if( $this->yubiotp->validateTestOTP($otp) ){
              return ['success' => true ];
           }
           else {
              return ['success' => false ];
           }
-         
+
         }
 }
