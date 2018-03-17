@@ -7,7 +7,7 @@ This is a second factor authentication provider for Yubico Yubikey devices in th
  # System Configuration
  You need to configure Nextcloud to use an authentication server. This is done in the security tab in the administration settings page.
  To authenticate via the standard Yubico cloud servers you will need to create a client ID and API key.
- This is free and can be generated at https://upgrade.yubico.com/getapikey/https://upgrade.yubico.com/getapikey/
+ This is free and can be generated at https://upgrade.yubico.com/getapikey/
 
  If you have your own authentication server you can fill in the details.
 
