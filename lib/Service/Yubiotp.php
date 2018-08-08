@@ -12,6 +12,7 @@
 
 namespace OCA\TwoFactor_Yubikey\Service;
 
+use OC;
 use OCA\TwoFactor_Yubikey\Provider\YubikeyProvider;
 use OCP\Authentication\TwoFactorAuth\IRegistry;
 use OCP\IUser;
@@ -46,16 +47,12 @@ class Yubiotp implements IYubiotp {
 	/** @var IRegistry */
 	private $providerRegistry;
 
-	/** @var YubikeyProvider */
-	private $provider;
-
 	public function __construct(KeyIDMapper $keyIDMapper,
 								ISession $session,
 								ILogger $logger,
 								IRequest $request,
 								IManager $activityManager,
-								IRegistry $providerRegistry,
-								YubikeyProvider $provider) {
+								IRegistry $providerRegistry) {
 		$this->keyIDMapper = $keyIDMapper;
 
 		$this->session = $session;
@@ -63,7 +60,6 @@ class Yubiotp implements IYubiotp {
 		$this->request = $request;
 		$this->activityManager = $activityManager;
 		$this->providerRegistry = $providerRegistry;
-		$this->provider = $provider;
 	}
 
 	/**
@@ -137,7 +133,8 @@ class Yubiotp implements IYubiotp {
 
 			$this->keyIDMapper->insert($dbKeyID);
 			if ($firstKey) {
-				$this->providerRegistry->enableProviderFor($this->provider, $user);
+				$provider = OC::$server->query(YubikeyProvider::class);
+				$this->providerRegistry->enableProviderFor($provider, $user);
 				$this->publishEvent($user, 'yubikey_enabled');
 			} else {
 				$this->publishEvent($user, 'yubikey_device_added');
