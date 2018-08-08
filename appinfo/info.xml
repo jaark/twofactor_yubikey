@@ -3,25 +3,30 @@
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
   <id>twofactor_yubikey</id>
   <name>Two Factor Yubikey</name>
+  <summary>TODO</summary>
   <description>Yubikey TFA provider using OTP mode</description>
-  <licence>AGPL</licence>
-  <author>Jack</author>
   <version>0.4.0</version>
+  <licence>agpl</licence>
+  <author>Jack</author>
   <namespace>TwoFactor_Yubikey</namespace>
-  <category>auth</category>
+  <category>security</category>
 
   <website>https://github.com/jaark/twofactor_yubikey#readme</website>
   <bugs>https://github.com/jaark/twofactor_yubikey/issues</bugs>
   <repository type="git">https://github.com/jaark/twofactor_yubikey.git</repository>
   <screenshot>https://raw.githubusercontent.com/jaark/twofactor_yubikey/master/screenshots/twofactor_yubikey-challenge.png</screenshot>
 
+  <dependencies>
+    <nextcloud min-version="14" max-version="14"/>
+  </dependencies>
+
   <two-factor-providers>
     <provider>OCA\TwoFactor_Yubikey\Provider\YubikeyProvider</provider>
   </two-factor-providers>
 
   <settings>
-    <personal>OCA\TwoFactor_Yubikey\Settings\Personal</personal>
     <admin>OCA\TwoFactor_Yubikey\Settings\Admin</admin>
+    <personal>OCA\TwoFactor_Yubikey\Settings\Personal</personal>
   </settings>
 
   <activity>
@@ -33,7 +38,4 @@
     </providers>
   </activity>
 
-  <dependencies>
-    <nextcloud min-version="14" max-version="14"/>
-  </dependencies>
 </info>
