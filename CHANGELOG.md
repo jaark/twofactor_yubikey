@@ -1,3 +1,7 @@
+## 0.4.0 - 2018-09-14
+## Changed
+- Nextcloud 14 Support
+
 ## 0.3.0 - 2018-03-17
 ## Added
 - Populates activity stream with events.
