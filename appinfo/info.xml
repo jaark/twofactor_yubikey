@@ -3,7 +3,7 @@
       xsi:noNamespaceSchemaLocation="https://apps.nextcloud.com/schema/apps/info.xsd">
   <id>twofactor_yubikey</id>
   <name>Two Factor Yubikey</name>
-  <summary>TODO</summary>
+  <summary>Two-factor authentication with Yubikey OTP</summary>
   <description>Yubikey TFA provider using OTP mode</description>
   <version>0.4.0</version>
   <licence>agpl</licence>
