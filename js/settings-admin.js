@@ -13,7 +13,7 @@
         save: function(parameter, value) {
           OC.msg.startSaving('#twofactor_yubikey-settings-msg');
 
-          OC.AppConfig.setValue('twofactor_yubikey', parameter, value);
+          OCP.AppConfig.setValue('twofactor_yubikey', parameter, value);
           OC.msg.finishedSaving('#twofactor_yubikey-settings-msg',
             {
               'status': 'success',
