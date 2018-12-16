@@ -17,7 +17,7 @@
   <screenshot>https://raw.githubusercontent.com/jaark/twofactor_yubikey/master/screenshots/twofactor_yubikey-challenge.png</screenshot>
 
   <dependencies>
-    <nextcloud min-version="14" max-version="14"/>
+    <nextcloud min-version="14" max-version="15"/>
   </dependencies>
 
   <two-factor-providers>
