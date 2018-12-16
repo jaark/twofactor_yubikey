@@ -1,3 +1,7 @@
+## 0.4.1 - 2018-12-16
+## Changed
+- Nextcloud 15 Support
+
 ## 0.4.0 - 2018-09-14
 ## Changed
 - Nextcloud 14 Support

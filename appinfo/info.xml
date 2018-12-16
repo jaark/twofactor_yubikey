@@ -5,7 +5,7 @@
   <name>Two Factor Yubikey</name>
   <summary>Two-factor authentication with Yubikey OTP</summary>
   <description>Yubikey TFA provider using OTP mode</description>
-  <version>0.4.0</version>
+  <version>0.4.1</version>
   <licence>agpl</licence>
   <author>Jack</author>
   <namespace>TwoFactor_Yubikey</namespace>
