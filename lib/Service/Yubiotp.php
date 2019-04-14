@@ -179,7 +179,8 @@ class Yubiotp implements IYubiotp {
 							$this->keyIDMapper->getYubikeyIds($user);
 							$this->publishEvent($user, 'yubikey_device_removed');
 						} catch (DoesNotExistException $ex) {
-							$this->providerRegistry->disableProviderFor($this->provider, $user);
+							$provider = OC::$server->query(YubikeyProvider::class);
+							$this->providerRegistry->disableProviderFor($provider, $user);
 							$this->publishEvent($user, 'yubikey_disabled');
 						}
 
@@ -207,6 +208,7 @@ class Yubiotp implements IYubiotp {
 		$yubi = new \Auth_Yubico($clientID, $secretKey, $config->getUseHttps(), $config->getValidateHttps());
 
 		$serverURL = $config->getAuthServerURL();
+		# Only override default URLs if one is secified in the plugin configuration
 		if ($serverURL) {
 			$yubi->addURLpart($serverURL);
 		}
@@ -258,7 +260,11 @@ class Yubiotp implements IYubiotp {
 		$secretKey = $config->getSecretKey();
 
 		$yubi = new \Auth_Yubico($clientID, $secretKey, $config->getUseHttps(), $config->getValidateHttps());
-		$yubi->addURLpart($config->getAuthServerURL());
+		$serverURL = $config->getAuthServerURL();
+		# Only override default URLs if one is secified in the plugin configuration
+		if ($serverURL) {
+			$yubi->addURLpart($serverURL);
+		}
 		$auth = $yubi->verify($otp);
 
 		if (\PEAR::isError($auth)) {
