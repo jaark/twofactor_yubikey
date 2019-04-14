@@ -205,7 +205,11 @@ class Yubiotp implements IYubiotp {
 		$secretKey = $config->getSecretKey();
 
 		$yubi = new \Auth_Yubico($clientID, $secretKey, $config->getUseHttps(), $config->getValidateHttps());
-		$yubi->addURLpart($config->getAuthServerURL());
+
+		$serverURL = $config->getAuthServerURL();
+		if ($serverURL) {
+			$yubi->addURLpart($serverURL);
+		}
 		$auth = $yubi->verify($otp);
 
 		if (\PEAR::isError($auth)) {

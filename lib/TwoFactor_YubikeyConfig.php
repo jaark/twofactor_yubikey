@@ -75,11 +75,18 @@ class TwoFactor_YubikeyConfig {
   /**
    * get the authentication server URL
    *
-   * @return string
+   * @return string Defined URL of authentication service or null if undefined.
    */
   public function getAuthServerURL() {
-          $authServerURL = $this->config->getAppValue('twofactor_yubikey', 'authServerURL', 'api2.yubico.com/wsapi/2.0/verify');
-          return (string)$authServerURL;
+          $authServerURL = $this->config->getAppValue('twofactor_yubikey', 'authServerURL', null);
+          # Return the current value if it is undefined or a URL
+          if ($authServerURL && !(substr( $authServerURL, 0, 8 ) === "https://") || substr( $authServerURL, 0, 7 ) === "http://") {
+                # Assume the value is from a previous version of the plugin
+                # and consists of a URL without the protocol identifier
+                $protocol = $this->getUseHttps() ? "https":"http";
+                $authServerURL = $protocol . "://" . $authServerURL;
+          }
+          return $authServerURL;
   }
 
   /**
