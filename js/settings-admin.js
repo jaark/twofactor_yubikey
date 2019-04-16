@@ -43,7 +43,7 @@ function testYubiKeyOTP(otp)
             OC.msg.finishedSaving('#twofactor_yubikey-settings-otpresults', {
                 'status': 'success',
                 'data': {
-                    'message':'Success! OTP Verified! Configuration is good.'
+                    'message': OC.L10N.translate('twofactor_yubikey', 'Success! OTP Verified! Configuration is good.')
                 }
             });
          } 
@@ -52,7 +52,7 @@ function testYubiKeyOTP(otp)
              OC.msg.finishedSaving('#twofactor_yubikey-settings-otpresults', {
                 'status': 'failure',
                 'data': {
-                    'message':'OTP Failed Validation! Verify Configuration and try again.'
+                    'message': OC.L10N.translate('twofactor_yubikey', 'OTP Failed Validation! ') + OC.L10N.translate('twofactor_yubikey', data.message)
                 }
             });
          }

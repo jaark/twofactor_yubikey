@@ -51,7 +51,7 @@ var twofactor_yubikeyid = {
                 OC.msg.finishedSaving('#twofactor_yubikey-settings-msg', {
                     'status': 'failure',
                     'data': {
-                        'message': OC.L10N.translate('twofactor_yubikey', 'Key Registration failed. Try again or contact your administrator.')
+                        'message': OC.L10N.translate('twofactor_yubikey', 'Key Registration failed. ') + OC.L10N.translate('twofactor_yubikey', data.message)
                     }
                 });
             }
@@ -140,8 +140,7 @@ $(document).ready(function() {
            
         }
     }).focusout(function(e) {
-        twofactor_yubikeyid.save($('#twofactor_yubikey-yubikey-name').val(), $(this).val());
-           
+        twofactor_yubikeyid.save($('#twofactor_yubikey-yubikey-name').val(), $(this).val());        
     });
 
 });

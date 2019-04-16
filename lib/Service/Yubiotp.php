@@ -19,6 +19,7 @@ use OCP\IUser;
 use OCA\TwoFactorYubikey\Db\YubiKey;
 use OCA\TwoFactorYubikey\Db\YubiKeyMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
+use OCP\Authentication\TwoFactorAuth\TwoFactorException;
 
 use OCP\Activity\IManager;
 use OCP\ILogger;
@@ -99,8 +100,9 @@ class Yubiotp implements IYubiotp {
 			$keyID = substr($otp, 0, 12);
 
 			//First, Let's validate the otp (ensures that configuration is good)
-			if (!$this->validateTestOTP($otp)) {
-				return false;
+			$testAuth = $this->validateTestOTP($otp);
+			if (\PEAR::isError($testAuth)) {
+				return $testAuth;
 			}
 
 			//Second, let's make sure we're not adding duplicates
@@ -154,8 +156,13 @@ class Yubiotp implements IYubiotp {
 	}
 
 	/**
+	 * Attempt to delete the pecified key for the user.
+	 * Returns true on success, false otherwise.
+	 * 
 	 * @param IUser $user
-	 * @param string $kkeyID
+	 * @param string $keyID
+	 * 
+	 * @return boolean
 	 */
 	public function deleteKeyId(IUser $user, $keyID) {
 
@@ -192,8 +199,12 @@ class Yubiotp implements IYubiotp {
 	}
 
 	/**
-	 * @param IUser $user
+	 * Tests if an OTP can be authenticated against the current server.
+	 * Used when registering a key or testing the server configuration.
+	 * 
 	 * @param string $otp
+	 * 
+	 * @return mixed PEAR error on error, true otherwise
 	 */
 	public function validateTestOTP($otp) {
 		$config = new \OCA\TwoFactorYubikey\TwoFactorYubikeyConfig(\OC::$server->getConfig());
@@ -209,11 +220,7 @@ class Yubiotp implements IYubiotp {
 		}
 		$auth = $yubi->verify($otp);
 
-		if (\PEAR::isError($auth)) {
-			return false;
-		} else {
-			return true;
-		}
+		return $auth;
 
 	}
 
