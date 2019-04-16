@@ -9,7 +9,7 @@
  * @copyright Jack 2016
  */
 
- namespace OCA\TwoFactor_Yubikey;
+ namespace OCA\TwoFactorYubikey;
 
  use OCP\IConfig;
 
@@ -18,9 +18,9 @@
  *
  * read/write config of the password policy
  *
- * @package OCA\TwoFactor_Yubikey
+ * @package OCA\TwoFactorYubikey
  */
-class TwoFactor_YubikeyConfig {
+class TwoFactorYubikeyConfig {
 
   /** @var IConfig */
   private $config;

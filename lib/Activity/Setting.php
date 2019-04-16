@@ -9,7 +9,7 @@
  * @copyright Jack 2018
  */
 
-namespace OCA\TwoFactor_Yubikey\Activity;
+namespace OCA\TwoFactorYubikey\Activity;
 
 use OCP\Activity\ISetting;
 use OCP\IL10N;

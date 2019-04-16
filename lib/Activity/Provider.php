@@ -9,7 +9,7 @@
  * @copyright Jack 2018
  */
 
-namespace OCA\TwoFactor_Yubikey\Activity;
+namespace OCA\TwoFactorYubikey\Activity;
 
 use InvalidArgumentException;
 use OCP\Activity\IEvent;

@@ -39,16 +39,9 @@ style('twofactor_yubikey', 'settings-admin');
   <p>
     <label>
       <span><?php p($l->t('Authentication  Server')) ?></span>
-      <input id="twofactor_yubikey-auth-server-url" type="text" value="<?php p($_['authServerURL']) ?>" placeholder="api.yubico.com/wsapi/2.0/verify" />
+      <input id="twofactor_yubikey-auth-server-url" type="text" value="<?php p($_['authServerURL']) ?>" placeholder="Leave blank for default Yubico servers." />
     </label>
 
-  </p>
-
-  <p>
-    <label>
-      <span><?php p($l->t('Use HTTPS')) ?></span>
-      <input id="twofactor_yubikey-use-https" type="checkbox" <?php if ($_['useHttps']) p('checked') ?> />
-    </label>
   </p>
 
   <p>

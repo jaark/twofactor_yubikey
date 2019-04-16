@@ -10,14 +10,14 @@
  */
 
 
-namespace OCA\TwoFactor_Yubikey\Service;
+namespace OCA\TwoFactorYubikey\Service;
 
 use OC;
-use OCA\TwoFactor_Yubikey\Provider\YubikeyProvider;
+use OCA\TwoFactorYubikey\Provider\YubikeyProvider;
 use OCP\Authentication\TwoFactorAuth\IRegistry;
 use OCP\IUser;
-use OCA\TwoFactor_Yubikey\Db\KeyID;
-use OCA\TwoFactor_Yubikey\Db\KeyIDMapper;
+use OCA\TwoFactorYubikey\Db\YubiKey;
+use OCA\TwoFactorYubikey\Db\YubiKeyMapper;
 use OCP\AppFramework\Db\DoesNotExistException;
 
 use OCP\Activity\IManager;
@@ -29,8 +29,8 @@ require_once __DIR__ . '/../../vendor/auth_yubico/Yubico.php';
 
 class Yubiotp implements IYubiotp {
 
-	/** @var KeyIDMapper */
-	private $keyIDMapper;
+	/** @var YubiKeyMapper */
+	private $YubiKeyMapper;
 
 	/** @var ISession */
 	private $session;
@@ -47,13 +47,13 @@ class Yubiotp implements IYubiotp {
 	/** @var IRegistry */
 	private $providerRegistry;
 
-	public function __construct(KeyIDMapper $keyIDMapper,
+	public function __construct(YubiKeyMapper $yubiKeyMapper,
 								ISession $session,
 								ILogger $logger,
 								IRequest $request,
 								IManager $activityManager,
 								IRegistry $providerRegistry) {
-		$this->keyIDMapper = $keyIDMapper;
+		$this->yubiKeyMapper = $yubiKeyMapper;
 
 		$this->session = $session;
 		$this->logger = $logger;
@@ -65,9 +65,9 @@ class Yubiotp implements IYubiotp {
 	/**
 	 * @param IUser $user
 	 */
-	public function hasKeyId(IUser $user) {
+	public function hasKey(IUser $user) {
 		try {
-			$this->keyIDMapper->getYubikeyIds($user);
+			$keys = $this->yubiKeyMapper->getYubikeys($user);
 		} catch (DoesNotExistException $ex) {
 			return false;
 		}
@@ -78,26 +78,20 @@ class Yubiotp implements IYubiotp {
 	/**
 	 * @param IUser $user
 	 */
-	public function getKeyIds(IUser $user) {
-		$ret_val = array();
+	public function getYubikeys(IUser $user) {
 		try {
-			$keyIds = $this->keyIDMapper->getYubikeyIds($user);
-			foreach ($keyIds as $value) {
-				array_push($ret_val, $value->getYubikeyId());
-			}
-
+			$keys = $this->yubiKeyMapper->getYubikeys($user);
+			return $keys;
 		} catch (DoesNotExistException $ex) {
-			return $ret_val;
+			return array();
 		}
-
-		return $ret_val;
 	}
 
 	/**
 	 * @param IUser $user
 	 * @param string $keyID
 	 */
-	public function setKeyId(IUser $user, $otp) {
+	public function addKey(IUser $user, $otp, $name = "") {
 
 		if (!empty($otp)) {
 			$firstKey = false; // Flag to indicate if this is the first Yubikey for the account. Only affects the activity string.
@@ -112,10 +106,10 @@ class Yubiotp implements IYubiotp {
 			//Second, let's make sure we're not adding duplicates
 			try {
 				//Get all the entities
-				$UserKeys = $this->keyIDMapper->getYubikeyIds($user);
+				$UserKeys = $this->yubiKeyMapper->getYubikeys($user);
 
-				foreach ($UserKeys as $keyid) {
-					if ($keyID === $keyid->getYubikeyId()) {
+				foreach ($UserKeys as $key) {
+					if ($keyID === $key->getYubikeyId()) {
 						//The key is already in the database, no need to add
 						return true;
 					}
@@ -126,12 +120,13 @@ class Yubiotp implements IYubiotp {
 			}
 
 			//Add the key to the database
-			$dbKeyID = new KeyID();
+			$dbYubiKey = new YubiKey();
 
-			$dbKeyID->setUserId($user->getUID());
-			$dbKeyID->setYubikeyId($keyID);
+			$dbYubiKey->setUserId($user->getUID());
+			$dbYubiKey->setYubikeyId($keyID);
+			$dbYubiKey->setYubikeyName($name);
 
-			$this->keyIDMapper->insert($dbKeyID);
+			$this->yubiKeyMapper->insert($dbYubiKey);
 			if ($firstKey) {
 				$provider = OC::$server->query(YubikeyProvider::class);
 				$this->providerRegistry->enableProviderFor($provider, $user);
@@ -167,16 +162,16 @@ class Yubiotp implements IYubiotp {
 		if (!empty($keyID)) {
 			try {
 				//First, findout if the user has the key
-				$UserKeys = $this->keyIDMapper->getYubikeyIds($user);
+				$UserKeys = $this->yubiKeyMapper->getYubikeys($user);
 
-				foreach ($UserKeys as $keyid) {
-					if ($keyID === $keyid->getYubikeyId()) {
+				foreach ($UserKeys as $key) {
+					if ($keyID === $key->getYubikeyId()) {
 						//Delete the entity
-						$this->keyIDMapper->delete($keyid);
+						$this->yubiKeyMapper->delete($key);
 
 						// Provide the activity entry. Checks to see if we have deleted the last key or not.
 						try {
-							$this->keyIDMapper->getYubikeyIds($user);
+							$this->yubiKeyMapper->getYubikeys($user);
 							$this->publishEvent($user, 'yubikey_device_removed');
 						} catch (DoesNotExistException $ex) {
 							$provider = OC::$server->query(YubikeyProvider::class);
@@ -201,11 +196,11 @@ class Yubiotp implements IYubiotp {
 	 * @param string $otp
 	 */
 	public function validateTestOTP($otp) {
-		$config = new \OCA\TwoFactor_Yubikey\TwoFactor_YubikeyConfig(\OC::$server->getConfig());
+		$config = new \OCA\TwoFactorYubikey\TwoFactorYubikeyConfig(\OC::$server->getConfig());
 		$clientID = $config->getClientID();
 		$secretKey = $config->getSecretKey();
 
-		$yubi = new \Auth_Yubico($clientID, $secretKey, $config->getUseHttps(), $config->getValidateHttps());
+		$yubi = new \Auth_Yubico($clientID, $secretKey, null, $config->getValidateHttps());
 
 		$serverURL = $config->getAuthServerURL();
 		# Only override default URLs if one is secified in the plugin configuration
@@ -230,13 +225,13 @@ class Yubiotp implements IYubiotp {
 	public function validateOTP(IUser $user, $otp) {
 
 
-		$config = new \OCA\TwoFactor_Yubikey\TwoFactor_YubikeyConfig(\OC::$server->getConfig());
+		$config = new \OCA\TwoFactorYubikey\TwoFactorYubikeyConfig(\OC::$server->getConfig());
 
 		$keyID = substr($otp, 0, 12);
 
 		try {
 			//returns an array of values
-			$userKeys = $this->keyIDMapper->getYubikeyIds($user);
+			$userKeys = $this->yubiKeyMapper->getYubikeys($user);
 		} catch (DoesNotExistException $ex) {
 			return false;
 		}
@@ -259,7 +254,7 @@ class Yubiotp implements IYubiotp {
 		$clientID = $config->getClientID();
 		$secretKey = $config->getSecretKey();
 
-		$yubi = new \Auth_Yubico($clientID, $secretKey, $config->getUseHttps(), $config->getValidateHttps());
+		$yubi = new \Auth_Yubico($clientID, $secretKey, null, $config->getValidateHttps());
 		$serverURL = $config->getAuthServerURL();
 		# Only override default URLs if one is secified in the plugin configuration
 		if ($serverURL) {

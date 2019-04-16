@@ -9,7 +9,7 @@
  * @copyright Jack 2016
  */
 
-namespace OCA\TwoFactor_Yubikey\Settings;
+namespace OCA\TwoFactorYubikey\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;

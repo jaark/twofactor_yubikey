@@ -9,14 +9,14 @@
  * @copyright Jack 2016
  */
 
-namespace OCA\TwoFactor_Yubikey\Settings;
+namespace OCA\TwoFactorYubikey\Settings;
 
 use OCP\AppFramework\Http\TemplateResponse;
 use OCP\Settings\ISettings;
 
 class Admin implements ISettings {
         public function __construct() {
-                $this->config = new \OCA\TwoFactor_Yubikey\TwoFactor_YubikeyConfig(\OC::$server->getConfig());
+                $this->config = new \OCA\TwoFactorYubikey\TwoFactorYubikeyConfig(\OC::$server->getConfig());
         }
 
 

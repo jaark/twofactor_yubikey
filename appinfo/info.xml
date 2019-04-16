@@ -5,10 +5,10 @@
   <name>Two Factor Yubikey</name>
   <summary>Two-factor authentication with Yubikey OTP</summary>
   <description>Yubikey TFA provider using OTP mode</description>
-  <version>0.4.1</version>
+  <version>0.5.0</version>
   <licence>agpl</licence>
   <author>Jack</author>
-  <namespace>TwoFactor_Yubikey</namespace>
+  <namespace>TwoFactorYubikey</namespace>
   <category>security</category>
 
   <website>https://github.com/jaark/twofactor_yubikey#readme</website>
@@ -17,24 +17,27 @@
   <screenshot>https://raw.githubusercontent.com/jaark/twofactor_yubikey/master/screenshots/twofactor_yubikey-challenge.png</screenshot>
 
   <dependencies>
-    <nextcloud min-version="14" max-version="15"/>
+    <database>sqlite</database>
+    <database>mysql</database>
+    <database>pgsql</database>
+    <nextcloud min-version="14" max-version="17"/>
   </dependencies>
 
   <two-factor-providers>
-    <provider>OCA\TwoFactor_Yubikey\Provider\YubikeyProvider</provider>
+    <provider>OCA\TwoFactorYubikey\Provider\YubikeyProvider</provider>
   </two-factor-providers>
 
   <settings>
-    <admin>OCA\TwoFactor_Yubikey\Settings\Admin</admin>
-    <personal>OCA\TwoFactor_Yubikey\Settings\Personal</personal>
+    <admin>OCA\TwoFactorYubikey\Settings\Admin</admin>
+    <personal>OCA\TwoFactorYubikey\Settings\Personal</personal>
   </settings>
 
   <activity>
     <settings>
-      <setting>OCA\TwoFactor_Yubikey\Activity\Setting</setting>
+      <setting>OCA\TwoFactorYubikey\Activity\Setting</setting>
     </settings>
     <providers>
-      <provider>OCA\TwoFactor_Yubikey\Activity\Provider</provider>
+      <provider>OCA\TwoFactorYubikey\Activity\Provider</provider>
     </providers>
   </activity>
 

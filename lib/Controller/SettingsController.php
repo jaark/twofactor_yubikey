@@ -9,9 +9,9 @@
  * @copyright Jack 2016
  */
 
-namespace OCA\TwoFactor_Yubikey\Controller;
+namespace OCA\TwoFactorYubikey\Controller;
 
-use OCA\TwoFactor_Yubikey\Service\IYubiotp;
+use OCA\TwoFactorYubikey\Service\IYubiotp;
 use OCP\Defaults;
 use OCP\IRequest;
 use OCP\IURLGenerator;
@@ -48,11 +48,12 @@ class SettingsController extends Controller {
         /**
          * @NoAdminRequired
          * @param string $otp
+         * @param string $name
          * @return JSONResponse
          */
-        public function setid($otp) {
+        public function addkey($otp, $name) {
           $user = $this->userSession->getUser();
-          if( $this->yubiotp->setKeyId($user, $otp) )
+          if( $this->yubiotp->addKey($user, $otp, $name) )
           {
             return ['success' => true ];
           }
@@ -64,10 +65,10 @@ class SettingsController extends Controller {
 
         /**
          * @NoAdminRequired
-         * @param string $keyId
+         * @param string $keyId Ybikey ID
          * @return JSONResponse
          */
-        public function deleteid($keyId) {
+        public function deletekey($keyId) {
           $user = $this->userSession->getUser();
           if( $this->yubiotp->deleteKeyId($user, $keyId) ){
              return ['success' => true ];
@@ -82,11 +83,16 @@ class SettingsController extends Controller {
          * @NoAdminRequired
          * @return JSONResponse
          */
-        public function getids() {
+        public function getkeys() {
           $user = $this->userSession->getUser();
-          $keyId = $this->yubiotp->getKeyIds($user);
+          $keys = $this->yubiotp->getYubikeys($user);
+          $out = array();
 
-          return ['keyId' => $keyId ];
+          foreach ($keys as $key) {
+                  $out[] = $key->outputArray();
+          }
+
+          return array('keys' => $out);
         }
 
 

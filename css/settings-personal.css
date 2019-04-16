@@ -21,14 +21,7 @@ div#twofactor_yubikey_settings_msg {
 	padding-left:10px;
 }
 
-.yubikey-device {
-	line-height: 300%;
-	display: flex;
-}
-
-.yubikey-device .more {
-	position: relative;
-}
+.
 .yubikey-device .icon-delete {
 	display: inline-block;
 	width: 10px;
@@ -50,4 +43,35 @@ div#twofactor_yubikey_settings_msg {
 	background-size: 100%;
 	padding: 3px;
 	margin: 3px;
+}
+
+.yubikey-device .icon-delete {
+	display: inline-block;
+	width: 10px;
+	height: 10px;
+	padding-left: 20px;
+	padding-top: 20px;
+	vertical-align: middle;
+	opacity: .7;
+}
+
+.twofactor_yubikey-loading-spinner {
+  width: 30px;
+  padding-left: 25px;
+	padding-top: 2px;
+	vertical-align: middle;
+}
+
+#twofactor_yubikey-table td {
+	border-top-color: rgb(221, 221, 221);
+	border-top-style: solid;
+	border-top-width: 1px;
+}
+
+#twofactor_yubikey-table td.yubikey-name {
+	width: 150px;
+}
+
+#twofactor_yubikey-table td.yubikey-name {
+	width: 200px;
 }

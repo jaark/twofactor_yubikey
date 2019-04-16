@@ -9,7 +9,7 @@
  * @copyright Jack 2016
  */
 
-namespace OCA\TwoFactor_Yubikey\Service;
+namespace OCA\TwoFactorYubikey\Service;
 
 use OCP\IUser;
 
@@ -18,13 +18,13 @@ interface IYubiotp
     /**
   * @param IUser $user
   */
- public function hasKeyId(IUser $user);
+ public function hasKey(IUser $user);
 
  /**
   * @param IUser $user
   * @param string $otp
   */
- public function setKeyId(IUser $user, $otp);
+ public function addKey(IUser $user, $otp);
 
  /**
   * @param IUser $user
@@ -41,4 +41,9 @@ interface IYubiotp
  * @param string $otp
  */
 public function validateTestOTP($otp);
+
+    /**
+  * @param IUser $user
+  */
+  public function getYubikeys(IUser $user);
 }

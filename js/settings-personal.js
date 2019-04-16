@@ -10,24 +10,25 @@
 
 var twofactor_yubikeyid = {
 
-    save: function(value) {
+    save: function(name, otp) {
         //if the length is less than 12 don't save
-        if( value.length < 12 )
+        if( otp.length < 12 )
         {
             return;
         }
 
         OC.msg.startSaving('#twofactor_yubikey-settings-msg');
 
-        var url = OC.generateUrl('/apps/twofactor_yubikey/settings/setid');
+        var url = OC.generateUrl('/apps/twofactor_yubikey/settings/addkey');
 
-        
+        $('#twofactor_yubikey-yubikey-name').val("");
         $('#twofactor_yubikey-yubikey-id').val("");
         //we're sending the entire string
         var updating = $.ajax(url, {
             method: 'POST',
             data: {
-                otp: value
+                otp: otp,
+                name: name
             }
         });
 
@@ -66,27 +67,28 @@ var twofactor_yubikeyid = {
 
 function displayYubiKey(item, index)
 {
-    var template        = '<div class="yubikey-device" >' + 
-                          '<span class="icon-yubikey-device"></span>'+
-                          '<span>'+item+ 
-                          '<a class="icon icon-delete" id=\"'+item+'\"></a>'+
-                          '</div>';
+    var template        = '<tr class="yubikey-device" >' + 
+                          '<td><span class="icon-yubikey-device"></span></td>'+
+                          '<td class="yubikey-name">' +  item.yubikeyName + '</td>' +
+                          '<td class="yubikey-id">' +  item.yubikeyId + '</td>' +
+                          '<td><a class="icon icon-delete" id=\"'+item.yubikeyId+'\"></a></td>'+
+                          '</tr>';
 
-    $('#yubikeys').append(template);
-    handle = '#'+item;
-    $('#yubikeys').one('click', handle, function() { removeYubiKeyID(item)});
+    $('#twofactor_yubikey-table-body').append(template);
+    handle = '#'+item.yubikeyId;
+    $('#twofactor_yubikey-table-body').one('click', handle, function() { removeYubiKey(item)});
 }
 
-function removeYubiKeyID(id)
+function removeYubiKey(key)
 {
         OC.msg.startSaving('#twofactor_yubikey-settings-msg');
 
-        var url = OC.generateUrl('/apps/twofactor_yubikey/settings/deleteid');
+        var url = OC.generateUrl('/apps/twofactor_yubikey/settings/deletekey');
 
         var updating = $.ajax(url, {
             method: 'POST',
             data: {
-                keyId: id
+                keyId: key.yubikeyId
             }
         });
          $.when(updating).done(function(data) {
@@ -104,27 +106,25 @@ function removeYubiKeyID(id)
 
 function loadKeys()
 {
-    $('#yubikeys').empty();
-    $('#yubikeys').append('<h3>Loading...</h3>'); 
-    var url = OC.generateUrl('/apps/twofactor_yubikey/settings/getids');
+    $('#twofactor_yubikey-loading').show();
+    var url = OC.generateUrl('/apps/twofactor_yubikey/settings/getkeys');
     var loading = $.ajax(url, {
         method: 'GET',
     });
-
-
+ 
     $.when(loading).done(function(data) {
 
-        $('#yubikeys').empty();
-        values = data.keyId instanceof Array ? data.keyId : [data.keyId];
-
-        if( values.length !== 0 )
+        $('#twofactor_yubikey-table-body').empty();
+        $('#twofactor_yubikey-loading').hide();
+  
+        if( data.keys.length !== 0 )
         {
-            $('#yubikey-devices').show(); 
-            values.forEach(displayYubiKey);
+            $('#twofactor_yubikey-list').show();
+            data.keys.forEach(displayYubiKey);
         }
         else
         {
-            $('#yubikey-devices').hide(); 
+            $('#twofactor_yubikey-list').hide();
         }
 
     });
@@ -136,11 +136,11 @@ $(document).ready(function() {
     loadKeys();
     $('#twofactor_yubikey-yubikey-id').keyup(function(e) {
         if (e.keyCode == 13) {
-            twofactor_yubikeyid.save($(this).val());
+            twofactor_yubikeyid.save($('#twofactor_yubikey-yubikey-name').val(), $(this).val());
            
         }
     }).focusout(function(e) {
-        twofactor_yubikeyid.save($(this).val());
+        twofactor_yubikeyid.save($('#twofactor_yubikey-yubikey-name').val(), $(this).val());
            
     });
 

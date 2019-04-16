@@ -9,7 +9,7 @@
  * @copyright Jack 2016
  */
 
-namespace OCA\TwoFactor_Yubikey\AppInfo;
+namespace OCA\TwoFactorYubikey\AppInfo;
 
 use OCP\AppFramework\App;
 
@@ -20,6 +20,6 @@ class Application extends App
         parent::__construct('twofactor_yubikey', $urlParams);
 
         $container = $this->getContainer();
-        $container->registerAlias('\OCA\TwoFactor_Yubikey\Service\IYubiotp', '\OCA\TwoFactor_Yubikey\Service\Yubiotp');
+        $container->registerAlias('\OCA\TwoFactorYubikey\Service\IYubiotp', '\OCA\TwoFactorYubikey\Service\Yubiotp');
     }
 }

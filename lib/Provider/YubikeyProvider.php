@@ -12,9 +12,9 @@ declare(strict_types=1);
  * @copyright Jack 2016
  */
 
-namespace OCA\TwoFactor_Yubikey\Provider;
+namespace OCA\TwoFactorYubikey\Provider;
 
-use OCA\TwoFactor_Yubikey\Service\IYubiotp;
+use OCA\TwoFactorYubikey\Service\IYubiotp;
 use OCP\Authentication\TwoFactorAuth\IProvider;
 use OCP\IL10N;
 use OCP\IUser;
@@ -93,6 +93,6 @@ class YubikeyProvider implements IProvider {
 	 * @return boolean
 	 */
 	public function isTwoFactorAuthEnabledForUser(IUser $user): bool {
-		return $this->yuibiotp->hasKeyId($user);
+		return $this->yuibiotp->hasKey($user);
 	}
 }
