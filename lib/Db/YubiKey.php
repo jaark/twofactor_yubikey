@@ -37,7 +37,7 @@ class YubiKey extends Entity {
             'id' => $this->id,
             'userId' => $this->userId,
             'yubikeyId' => $this->yubikeyId,
-            'yubikeyName' => $this->yubikeyName
+            'yubikeyName' => (is_null ($this->yubikeyName)) ? "" : $this->yubikeyName
             );    
     }
 
