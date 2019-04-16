@@ -18,7 +18,7 @@ style('twofactor_yubikey', 'settings-admin');
 <div id="twofactor_yubikey" class="section">
   <h2 class="inlineblock"><?php p($l->t('Yubikey Configuration')); ?></h2> 
 
-  <br/><em>If using YubiCloud, Client ID and Secret Key can be requested at <a href="https://upgrade.yubico.com/getapikey/" >https://upgrade.yubico.com/getapikey/</a>. Use the following for Authentication Server Address: <b> api.yubico.com/wsapi/2.0/verify </b></em>
+  <br/><em>If using YubiCloud, Client ID and Secret Key can be requested at <a href="https://upgrade.yubico.com/getapikey/" >https://upgrade.yubico.com/getapikey/</a>.</em>
   <div id="twofactor_yubikey-settings-msg" class="msg success inlineblock" style="display: none;">Saved</div>
 
   <p>
